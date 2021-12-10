@@ -1,4 +1,3 @@
-
 module.exports = {
   env: {
     browser: true,
@@ -6,7 +5,7 @@ module.exports = {
     jest: true,
   },
   extends: ['airbnb'],
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -44,8 +43,13 @@ module.exports = {
     'react/no-unused-prop-types': 0,
     'no-bitwise': 0,
     'react/jsx-one-expression-per-line': 0,
+    'react/function-component-definition': 0,
   },
   settings: {
-    'import/resolver': 'webpack',
+    'import/resolver': {
+      webpack: {
+        config: 'config.webpack.js',
+      },
+    },
   },
 }

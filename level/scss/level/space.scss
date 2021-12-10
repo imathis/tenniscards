@@ -1,0 +1,7 @@
+@use 'sass:map';
+@use '../../constants/space.js';
+
+@function get($val) {
+  @return map.get(space.$sizes, $val);
+}
+

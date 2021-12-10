@@ -6,10 +6,11 @@ module.exports = (api) => {
   ]
   const plugins = [
     ['@babel/plugin-transform-runtime', {}],
+    "@babel/proposal-object-rest-spread",
   ]
   const overrides = [
     {
-      test: './app/level/constants/*.js',
+      test: './level/constants/*.js',
       presets: [
         ['@babel/preset-env', {
           corejs: 3,

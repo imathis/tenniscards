@@ -1,0 +1,35 @@
+@use 'level/color';
+
+.level-link {
+  display: inline;
+  cursor: pointer;
+  color: color.get(blue-600);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .level-link-text {
+    display: inline;
+  }
+
+  &[data-text-link] {
+    color: inherit;
+    text-decoration: underline;
+
+    &:hover {
+      color: color.get(neutral-700);
+      text-decoration: underline;
+    }
+  }
+
+  &[data-subtle] {
+    color: color.get(neutral-500);
+
+    &:hover {
+      color: color.get(neutral-700);
+      text-decoration: underline;
+    }
+  }
+}

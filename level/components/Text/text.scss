@@ -1,0 +1,20 @@
+@use 'level/color';
+
+.level-text {
+  margin: 0;
+}
+
+.section-label, .level-section-label {
+  color: color.get(neutral-500);
+  font-weight: 700;
+  font-size: 0.9em;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+}
+
+.level-text[data-theme="quote"] {
+  padding: 12px;
+  background: color.get(neutral-25);
+  border-left: 2px solid color.get(neutral-200);
+  position: relative;
+}

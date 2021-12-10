@@ -1,0 +1,46 @@
+@use 'level/color';
+
+@keyframes enter {
+  0% { max-width: 0; }
+  100% { max-width: 100%; }
+}
+
+@keyframes loading {
+  0% { background-position: 0 0; }
+  100% { background-position: 200vw 0; }
+}
+
+.level-progress-bar {
+  border: 1px solid color.get(neutral-700);
+  box-shadow: rgba(#fff, 0.2) 0 0 0 1px inset;
+  background: color.get(neutral-600);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.level-progress-text {
+  text-align: center;
+  color: color.get(neutral-600);
+}
+
+.level-progress-amount {
+  height: 15px;
+  border-radius: 15px;
+  transition: width 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  background-image: linear-gradient(-45deg, hsl(258, 85%, 78%), hsl(303, 85%, 78%), hsl(348, 85%, 78%), hsl(78, 85%, 78%), hsl(78, 85%, 78%), hsl(123, 85%, 78%), hsl(168, 85%, 78%), hsl(213, 85%, 78%), hsl(258, 85%, 78%));
+  background-size: 200vw;
+  animation: loading 6s linear infinite, enter 1.5s ease;
+  box-shadow: rgba(#fff, 0.5) 0 0 0 1px inset, rgba(#000, 0.8) 4px 0 20px;
+}
+
+.level-progress-bar[data-status=failed] {
+  box-shadow: rgba(color.get(red-600), 0.2) 0 0 0 1px inset;
+  border: 1px solid color.get(red-700);
+  .level-progress-amount {
+    opacity: 0.5;
+  }
+}
+
+.level-progress-text[data-status=failed] {
+  color: color.get(red-700);
+}

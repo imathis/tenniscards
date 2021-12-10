@@ -1,0 +1,9 @@
+@use 'sass:map';
+@use 'sass:string';
+
+@use '../../constants/allColors.js' as all-colors;
+@forward '../../constants/colors.js';
+
+@function get($val) {
+  @return map.get(all-colors.$colors, $val);
+}

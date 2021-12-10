@@ -1,0 +1,39 @@
+$widths: 300px, 500px, 650px, 960px, 1200px, 1400px;
+
+@mixin visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@function at-least-width($width) {
+  $size: nth($widths, $width) or $width;
+  @return "min-width: #{$size}";
+}
+
+@function until-width($width) {
+  $size: nth($widths, $width) or $width;
+  @return "max-width: #{$size - 1}";
+}
+
+@mixin at-least($size) {
+  @media only screen and (#{at-least-width($size)}) {
+    @content;
+  }
+}
+
+@mixin until($size) {
+  @media only screen and (#{until-width($size)}) {
+    @content;
+  }
+}
+
+@mixin between($size) {
+  @media only screen and (#{at-least-width($size)} and #{until-width($size)}) {
+    @content;
+  }
+}
+

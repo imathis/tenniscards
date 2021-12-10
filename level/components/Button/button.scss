@@ -1,0 +1,130 @@
+@use 'level/color';
+@use 'level/space';
+
+@mixin button-theme ($color, $text-color: #fff, $border-color: darken($color, 5)) {
+  color: $text-color;
+  background-color: $color;
+  border-color: $border-color;
+
+  &:not([disabled]):hover {
+    background: darken($color, 3);
+    border-color: darken($border-color, 3);
+    border-bottom-color: darken($border-color, 5);
+  }
+
+  &:not([disabled]):active {
+    background: darken($color, 6);
+    border-color: darken($border-color, 5);
+  }
+}
+
+.level-button {
+  font-family: system-ui;
+  margin: 0;
+  border-radius: 2px;
+  text-decoration: none;
+  transition:
+    filter 0.12s ease-in-out,
+    border-color 0.12s ease-in-out,
+    background-color 0.12s ease-in-out;
+  font-weight: 400;
+  line-height: normal;
+  border: 1px solid;
+  cursor: pointer;
+  display: inline-block;
+
+  &[disabled] {
+    opacity: 50%;
+    pointer-events: none;
+
+    .level-button-text {
+      opacity: 70%;
+    }
+  }
+
+  &[type=button],
+  &[role=link],
+  &[data-theme=default] {
+    @include button-theme(color.get(neutral-100), color.get(neutral-700));
+  }
+
+  &[data-theme=menu] {
+    @include button-theme(color.get(white), color.get(neutral-700), color.get(neutral-200));
+  }
+
+  &[data-theme=subtle] {
+    @include button-theme(color.get(neutral-25), color.get(neutral-700), color.get(neutral-200));
+  }
+
+  &[data-theme=primary] {
+    @include button-theme(color.get(blue-600));
+  }
+
+  &[data-theme=secondary] {
+    @include button-theme(color.get(neutral-600));
+  }
+
+  &[data-theme="ghost"] {
+    @include button-theme(transparent, color.get(neutral-700));
+  }
+
+  &[data-theme="link"] {
+    @include button-theme(transparent, color.get(blue-500));
+  }
+
+  &[data-size='0'][data-theme] {
+    font-size: 10px;
+    padding: 0;
+    &, &:hover, &:focus {
+      background: none;
+      border: none;
+    }
+  }
+
+  &[data-size='1'] {
+    font-size: 10px;
+    padding: space.get(2);
+  }
+
+  &[data-size='2'] {
+    font-size: 11px;
+    padding: space.get(2) space.get(3);
+  }
+
+  &[data-size='3'] {
+    font-size: 12px;
+    padding: space.get(3) space.get(4);
+  }
+
+  // Default
+  &[data-size='4'] {
+    font-size: 13px;
+    padding: space.get(4) space.get(5);
+  }
+  
+  &[data-size='5'] {
+    font-size: 14px;
+    padding: space.get(5) space.get(7);
+  }
+
+  &[data-size='6'] {
+    font-size: 17px;
+    padding: space.get(5) space.get(8);
+  }
+
+  &[data-theme="wrapper"] {
+    @include button-theme(transparent, color.get(neutral-700));
+    font-size: inherit;
+    padding: 0;
+    margin: 0;
+    display: block;
+    width: 100%;
+    text-align: inherit;
+  }
+}
+
+@media print {
+  .level-button {
+    display: none;
+  }
+}
