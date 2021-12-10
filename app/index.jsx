@@ -7,6 +7,7 @@ import {
 
 import './index.scss'
 import '@app/assets/favicons/favicons'
+import '@app/assets/cards/cards'
 import { AppIndex } from '@app/views/index'
 
 ReactDOM.render(

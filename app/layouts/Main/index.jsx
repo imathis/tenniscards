@@ -14,10 +14,10 @@ const Main = () => (
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/templates">Templates</Link>
+          <Link to="/deck/new">New Deck</Link>
         </li>
         <li>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/deck/kudi2xrhtidh/settings">Settings</Link>
         </li>
         <li>
           <Link to="/nothing-here">Nothing Here</Link>

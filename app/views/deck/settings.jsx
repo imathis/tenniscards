@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Stack, Shelf, Button } from '@level'
 import { useDeck } from '@app/hooks/useDeck'
-import { courts } from '@app/helpers/deck'
+import { courts, aliases } from '@app/helpers/deck'
 
 const valueToCount = (value) => {
   const number = Number.parseInt(value, 10)
@@ -22,25 +22,25 @@ const countToValue = (value) => {
 const Settings = () => {
   const {
     deckId,
-    courtState,
+    courtPlan,
     setCourtCount,
     setCourts,
-    resetCourtState,
+    resetCourtPlan,
   } = useDeck()
 
   const navigate = useNavigate()
 
   const onChange = React.useCallback(({ target }) => {
-    const { value, name } = target
-    setCourtCount({ court: name, count: valueToCount(value) })
+    const { value, name: court } = target
+    setCourtCount({ court, count: valueToCount(value) })
   }, [])
 
   const start = React.useCallback(async () => {
     await setCourts()
     navigate('../start', { replace: true })
-  }, [])
+  }, [setCourts])
 
-  if (!courtState) return null
+  if (!courtPlan) return null
 
   return (
     <Stack space={5}>
@@ -48,12 +48,13 @@ const Settings = () => {
       {
         courts.map((court) => {
           const name = `court${court}`
-          const count = courtState[name]
+          const count = courtPlan[name]
           const value = countToValue(count)
+          const type = aliases.counts[count]
           return (
             <label htmlFor={name} key={name}>
               <Shelf space={8}>
-                {court}
+                {aliases.courts[name]}
                 <input
                   type="range"
                   id={name}
@@ -63,14 +64,14 @@ const Settings = () => {
                   value={value}
                   onChange={onChange}
                 />
-                <div>{ count }</div>
+                <div>{ type === 'Empty' ? '' : type }</div>
               </Shelf>
             </label>
           )
         })
       }
       <Shelf space={8}>
-        <Button text="Reset" onClick={resetCourtState} />
+        <Button text="Reset" onClick={resetCourtPlan} />
         <Button theme="primary" text="Start" onClick={start} />
       </Shelf>
     </Stack>

@@ -2,14 +2,14 @@ import React from 'react'
 import { useParams, Outlet } from 'react-router-dom'
 import { useGetQuery as useQuery, isNumber } from '@level'
 import {
-  useDeckRoutes, players, fullCourts, emptyCourts,
+  useDeckRoutes, players, fullCourts, emptyCourts, aliases,
 } from '@app/helpers/deck'
 
 const DeckContext = React.createContext()
 const useDeck = () => React.useContext(DeckContext)
 
 // Expects cards in format [{ code: '2S', ...},]
-const courtStateFromInactivePile = (cards = []) => (
+const courtPlanFromInactivePile = (cards = []) => (
   cards.reduce((all, { code }) => {
     // get court from split '2S' => '2'
     const [court] = code.split('')
@@ -40,17 +40,32 @@ const useDeckSession = ({ deckId }) => {
   const shuffleAll = React.useCallback(shuffleDeck, [deckId])
   const shuffle = React.useCallback(() => shuffleDeck({ query: { remaining: true } }), [deckId])
 
-  const [courtState, setCourtState] = React.useState(emptyCourts())
+  const [courtPlan, setCourtPlan] = React.useState(emptyCourts())
   const [remainingCount, setRemainingCount] = React.useState(0)
   const [drawnCards, setDrawnCards] = React.useState([])
   const [inactiveCards, setInactiveCards] = React.useState([])
   const [ready, setReady] = React.useState()
 
+  const playingCourts = React.useMemo(() => (
+    Object.keys(courtPlan).reduce((all, court) => {
+      const count = courtPlan[court]
+      if (count) return all.concat({ court, count })
+      return all
+    }, [])
+  ), [courtPlan])
+
+  const courtsByType = React.useMemo(() => (
+    Object.keys(courtPlan).reduce((all, court) => {
+      const count = aliases.counts[courtPlan[court]]
+      return ({ ...all, [count]: (all[count] || []).concat(aliases.courts[court]) })
+    }, {})
+  ), [courtPlan])
+
   // Returns an array of inactive card codes, e.g. [2S,KH,…]
-  const getInactiveCards = React.useCallback(() => (
-    courtState
-      ? Object.keys(courtState).reduce((all, court) => {
-        const count = courtState[court]
+  const getInactiveCards = React.useCallback((plan) => (
+    plan
+      ? Object.keys(plan).reduce((all, court) => {
+        const count = plan[court]
         // `court2` => `2`
         const courtId = court.replace(/court/, '')
         // Select remainder of court (available suits) and
@@ -58,7 +73,7 @@ const useDeckSession = ({ deckId }) => {
         return all.concat(players.slice(count, 4).map((suit) => `${courtId}${suit}`))
       }, [])
       : []
-  ), [courtState])
+  ), [])
 
   const setupDeck = React.useCallback(async (inactivePile) => {
     // Not yet initialized
@@ -76,7 +91,7 @@ const useDeckSession = ({ deckId }) => {
       const cards = filterJokers(inactivePile)
       // If there are non-Joker inactive cards
       if (cards.length) {
-        setCourtState(courtStateFromInactivePile(cards))
+        setCourtPlan(courtPlanFromInactivePile(cards))
       }
     }
   }, [deckId])
@@ -98,21 +113,44 @@ const useDeckSession = ({ deckId }) => {
   }, [remainingCount])
 
   const drawCard = React.useCallback(async () => {
-    const { cards } = await draw()
-    if (cards?.length) {
-      await addDrawn({ query: { cards: cards.map(({ code }) => code) } })
-      return cards[0]
+    const { data } = await draw()
+    if (data?.cards?.length) {
+      await addDrawn({ query: { cards: data.cards.map(({ code }) => code) } })
+      return data.cards[0]
     }
     return null
   }, [addDrawn, draw])
+
+  const setCourtCount = React.useCallback(({ court, count }) => {
+    setCourtPlan((cs) => ({ ...cs, [court]: count }))
+  }, [courtPlan])
+
+  const setCourts = React.useCallback(async () => {
+    const inactive = getInactiveCards(courtPlan).concat(['X1', 'X2'])
+    // Return all inactive cards to the deck
+    await shuffleAll()
+    // Draw all cards
+    await draw({ query: { count: 54 } })
+    // Exile all inactive cards
+    await exile({ query: { cards: inactive } })
+    // Return remaining cards ready to be drawnCards
+    await returnCards({ query: { remaining: true } })
+    // Shuffle cards
+    return shuffle({ query: { remaining: true } })
+  }, [courtPlan])
+
+  const resetCourtPlan = React.useCallback(() => {
+    setCourtPlan(emptyCourts())
+  }, [courtPlan])
 
   React.useEffect(() => {
     setCardsRemaining(drawData?.remaining)
   }, [drawData])
 
   React.useEffect(() => {
-    if (drawnPileData?.cards.length) {
-      setDrawnCards((d) => d.concat(drawnPileData.cards))
+    console.log(drawnPileData)
+    if (drawnPileData?.piles?.drawn?.cards?.length) {
+      setDrawnCards((d) => d.concat(drawnPileData?.piles?.drawn?.cards))
     }
   }, [drawnPileData])
 
@@ -137,28 +175,6 @@ const useDeckSession = ({ deckId }) => {
     if (exiled) addInactiveCards(exiled)
   }, [exiled])
 
-  const setCourtCount = React.useCallback(({ court, count }) => {
-    setCourtState((cs) => ({ ...cs, [court]: count }))
-  }, [courtState])
-
-  const setCourts = React.useCallback(async () => {
-    const inactive = getInactiveCards().concat(['X1', 'X2'])
-    // Return all inactive cards to the deck
-    await shuffleAll()
-    // Draw all cards
-    await draw({ query: { count: 54 } })
-    // Exile all inactive cards
-    await exile({ query: { cards: inactive } })
-    // Return remaining cards ready to be drawnCards
-    await returnCards({ query: { remaining: true } })
-    // Shuffle cards
-    return shuffle({ query: { remaining: true } })
-  }, [courtState])
-
-  const resetCourtState = React.useCallback(() => {
-    setCourtState(emptyCourts())
-  }, [courtState])
-
   // When deckId changes, check inactive pile
   React.useEffect(() => {
     if (deckId) {
@@ -174,10 +190,12 @@ const useDeckSession = ({ deckId }) => {
     drawnCards,
     inactiveCards,
     remainingCount,
-    courtState,
+    courtPlan,
     setCourtCount,
-    resetCourtState,
+    resetCourtPlan,
     setCourts,
+    playingCourts,
+    courtsByType,
     deckRoutes,
   }
 }

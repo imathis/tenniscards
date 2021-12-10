@@ -35,6 +35,24 @@ const useDeckRoutes = (params = {}) => ({
 
 const courts = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K']
 const players = ['C', 'D', 'H', 'S']
+const aliases = {
+  courts: {
+    courtA: '1',
+    court2: '2',
+    court3: '3',
+    court4: '4',
+    court5: '5',
+    court6: '6',
+    court7: '7',
+    court8: '8',
+    court9: '9',
+    court0: '10',
+    courtJ: '11',
+    courtQ: '12',
+    courtK: '13',
+  },
+  counts: ['Empty', 'Loner', 'Singles', 'Australian', 'Doubles'],
+}
 
 const initCourts = (options) => (
   courts.reduce((all, court) => (
@@ -45,17 +63,11 @@ const initCourts = (options) => (
 const emptyCourts = () => initCourts({ full: false })
 const fullCourts = () => initCourts({ full: true })
 
-const valueToCount = (value) => {
-  const number = Number.parseInt(value, 10)
-  // allow values 0, 2, 3, 4
-  return number ? number + 1 : number
-}
-
 export {
   useDeckRoutes,
   emptyCourts,
   fullCourts,
-  valueToCount,
   courts,
   players,
+  aliases,
 }
