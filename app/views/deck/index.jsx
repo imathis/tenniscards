@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Routes,
   Route,
-  Navigate,
 } from 'react-router-dom'
 
 import { DeckProvider } from '@app/hooks/useDeck'
@@ -17,6 +16,7 @@ const DeckIndex = () => (
     <Route path=":deckId/*" element={<DeckProvider />}>
       <Route index element={<Start />} />
       <Route path="settings" element={<Settings />} />
+      <Route path="start" element={<Start />} />
       <Route path="draw" element={<Draw />} />
     </Route>
   </Routes>
