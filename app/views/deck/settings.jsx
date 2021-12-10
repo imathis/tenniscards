@@ -32,8 +32,6 @@ const Settings = () => {
     setCourtCount({ court: name, count: valueToCount(value) })
   }, [])
 
-  console.log(courtState)
-
   if (!courtState) return null
 
   return (

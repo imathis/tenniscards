@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Outlet } from 'react-router-dom'
 import { useGetQuery as useQuery } from '@level'
 import {
-  useDeckRoutes, courts, players, fullCourts, emptyCourts,
+  useDeckRoutes, players, fullCourts, emptyCourts,
 } from '@app/helpers/deck'
 
 const DeckContext = React.createContext()
@@ -18,7 +18,6 @@ const courtStateFromInactivePile = (cards = []) => (
     const courtName = `court${court}`
     // Start with a full court
     const count = all[courtName]
-    console.log({ courtName, code, count })
     // Subtract inactive card from court size
     return { ...all, [courtName]: count - 1 }
   }, fullCourts())
@@ -69,8 +68,6 @@ const useDeckSession = ({ deckId }) => {
       const cards = filterJokers(inactivePile)
       // If there are non-Joker inactive cards
       if (cards.length) {
-        console.log(cards)
-        console.log(courtStateFromInactivePile(cards))
         setCourtState(courtStateFromInactivePile(cards))
       }
     }
@@ -103,6 +100,8 @@ const useDeckSession = ({ deckId }) => {
     await exile({ query: { cards: inactive } })
     // Return remaining cards ready to be drawn
     await returnCards({ query: { remaining: true } })
+    // Shuffle cards
+    await shuffle({ query: { remaining: true } })
   }, [courtState])
 
   const resetCourtState = React.useCallback(() => {
