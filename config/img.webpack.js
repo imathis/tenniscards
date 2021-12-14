@@ -27,6 +27,7 @@ const imgConfigs = [
       {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
+        include: /assets\/icons\/.*/,
         use: ['@svgr/webpack'],
       },
     ],

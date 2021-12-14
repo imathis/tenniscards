@@ -4,8 +4,22 @@ import { aliases } from '@app/helpers/deck'
 import { useTheme } from '@app/hooks/useTheme'
 import { useParams } from 'react-router-dom'
 import { useSwipe } from 'beautiful-react-hooks'
+import { SvgIcon } from '@level'
+
+import * as cards from '@app/assets/icons'
 
 import './card.scss'
+
+const CardIcon = ({ name, ...props }) => {
+  const svg = cards[`card${name}`]
+  return (
+    <SvgIcon svg={svg} {...props} />
+  )
+}
+
+CardIcon.propTypes = {
+  name: PropTypes.oneOf(Object.keys(cards).map((n) => n.replace(/card/, ''))).isRequired,
+}
 
 const Card = ({ card, nextCard, prevCard }) => {
   const { cardId = card } = useParams()
@@ -14,7 +28,6 @@ const Card = ({ card, nextCard, prevCard }) => {
   const { swipeCount, direction } = useSwipe(ref, {
     direction: 'horizontal', threshold: 10, preventDefault: true,
   })
-  const url = `/images/${cardId}.svg`
 
   const courtColor = React.useMemo(() => (
     ['D', 'H'].includes(cardId.split('')[1]) ? 'red' : 'black'
@@ -35,7 +48,7 @@ const Card = ({ card, nextCard, prevCard }) => {
 
   return (
     <div className="court-card-wrapper" ref={ref}>
-      <img className="court-card" src={url} alt="card" />
+      <CardIcon name={cardId} className="court-card" />
       <div className="court-card-label">
         <div className="court-card-label-small">
           <div className="court-card-label-small-text">you have drawn</div>
