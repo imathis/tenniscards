@@ -4,27 +4,49 @@ import {
   Button, Stack, Shelf, pluralize,
 } from '@level'
 
-const Draw = () => {
-  const { drawCard, drawnCards } = useDeck()
-  const [drawn, setDrawn] = React.useState([])
+import { Card } from './card'
 
-  const getCard = (position = drawn.length - 1) => drawn[position]
-  const getCardGraphic = () => getCard().images.png
+const Draw = () => {
+  // All drawn cards from all sessions
+  const { drawCard, drawnCards } = useDeck()
+  // Track cards drawn in this session
+  const [drawn, setDrawn] = React.useState([])
+  // Track position of card drawing/viewing
+  const [position, setPosition] = React.useState(0)
 
   const draw = React.useCallback(async () => {
-    const card = await drawCard()
-    setDrawn((d) => (d || []).concat(card))
-  }, [drawn])
+    const newCard = await drawCard()
+    setDrawn((d) => d.concat(newCard))
+    setPosition(drawn.length)
+  }, [drawn, position])
 
   React.useEffect(async () => {
     draw()
   }, [])
 
+  const prevCard = React.useCallback(() => {
+    if (position) { setPosition(position - 1) }
+  }, [position])
+
+  const nextCard = React.useCallback(() => {
+    if (position + 1 === drawn.length) {
+      draw()
+    } else {
+      setPosition(position + 1)
+    }
+  }, [drawn, position])
+
+  const card = drawn[position]
+  const cardCode = card?.code
+
   if (drawn.length) {
     return (
       <Stack space={5}>
-        <svg src={getCardGraphic()} />
-        <Button onClick={draw} text="Draw Again" />
+        <Card
+          card={cardCode}
+          nextCard={nextCard}
+          prevCard={prevCard}
+        />
       </Stack>
     )
   }

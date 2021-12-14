@@ -8,13 +8,11 @@ const {
   HtmlPlugin,
 } = require('./config/core.config')
 
-// Webpack Plugins
-
 // Webpack configs
 const { babelConfigs } = require('./config/babel.webpack')
 const { cssConfigs } = require('./config/css.webpack')
 const { GitPlugin } = require('./config/git.webpack')
-const { svgConfigs } = require('./config/svg.webpack')
+const { imgConfigs } = require('./config/img.webpack')
 
 module.exports = {
   entry,
@@ -27,9 +25,9 @@ module.exports = {
   devtool: mode === 'development' && process.env.REACT_DEVTOOLS ? 'eval-source-map' : 'source-map',
   module: {
     rules: [
-      // Inject SVG congfig and svgr loader
+      // Inject Image congfig and svgr loader
       ...cssConfigs,
-      ...svgConfigs,
+      ...imgConfigs,
       ...babelConfigs,
     ],
   },

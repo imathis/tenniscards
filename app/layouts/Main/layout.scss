@@ -1,0 +1,41 @@
+#main {
+  display: grid;
+  height: 100%;
+  overflow: scroll;
+  .shade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    transition: opacity .4s ease-out;
+  }
+}
+
+ul, li {
+  margin: 0;
+}
+
+.shade.default {
+  background: linear-gradient(0deg, #7f36ff, #702de5, #6124cb, #521cb2, #441499, #360b81, #29046a, #1c0054);
+}
+.shade.black {
+  background: linear-gradient(0deg, #444, #333, #222, #111, #000);
+}
+.shade.red {
+  background: linear-gradient(0deg, #b51a00, #9a1300, #7f0d00, #640600, #490000);
+}
+
+[data-theme=default] {
+  .shade { opacity: 0; }
+  .shade.default { opacity: 1; }
+}
+[data-theme=black] {
+  .shade.red { opacity: 0; }
+  .shade.black { opacity: 1; }
+}
+
+[data-theme=red] {
+  .shade.red { opacity: 1; }
+}

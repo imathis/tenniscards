@@ -1,33 +1,22 @@
 import React from 'react'
 import {
   Outlet,
-  Link,
 } from 'react-router-dom'
 
+import { Link } from '@level'
+import './layout.scss'
+
 const Main = () => (
-  <div>
-    {/* A "layout route" is a good place to put markup you want to
-        share across all the pages on your site, like navigation. */}
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/deck/new">New Deck</Link>
-        </li>
-        <li>
-          <Link to="/deck/kudi2xrhtidh/settings">Settings</Link>
-        </li>
-        <li>
-          <Link to="/nothing-here">Nothing Here</Link>
-        </li>
-      </ul>
+  <div id="main">
+    <nav id="menu">
+      <Link to="welcome" text="Welcome" />
+      <Link to="deck/new" text="New Game" />
+      <Link to="card" text="Card" />
     </nav>
-
-    <hr />
-
     <Outlet />
+    <div className="shade default" />
+    <div className="shade black" />
+    <div className="shade red" />
   </div>
 )
 

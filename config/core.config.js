@@ -11,7 +11,7 @@ const appSlug = '@app'
 const appPath = NodePath.resolve(__dirname, `../${appName}`)
 const frameworkPath = NodePath.resolve(__dirname, `../${frameworkName}`)
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
-const entry = mode === 'development' && process.env.REACT_DEVTOOLS ? ['react-devtools', './app/index.jsx'] : './app/index.jsx'
+const entry = mode === 'development' && process.env.REACT_DEVTOOLS ? ['react-devtools', './app'] : './app'
 
 module.exports = {
   appName,
