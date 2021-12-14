@@ -10,10 +10,36 @@ import * as cards from '@app/assets/icons'
 
 import './card.scss'
 
+const CardSvg = ({
+  width = '224',
+  height = '312',
+  fill = '#fff',
+  children,
+}) => (
+  <svg
+    className="court-card"
+    style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
+    version="1.1"
+    viewBox={`0 0 ${width} ${height}`}
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <rect
+      fill={fill}
+      width={width}
+      height={height}
+      ry="12"
+    />
+    { children }
+  </svg>
+)
+
 const CardIcon = ({ name, ...props }) => {
   const svg = cards[`card${name}`]
   return (
-    <SvgIcon svg={svg} {...props} />
+    <CardSvg>
+      <SvgIcon fill="#000" svg={svg} {...props} />
+    </CardSvg>
   )
 }
 
