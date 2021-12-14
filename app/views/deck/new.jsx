@@ -26,6 +26,8 @@ const NewDeck = () => {
     }
   }, [deckId])
 
+  console.log(deckId)
+
   React.useEffect(() => {
     if (pileData) navigate(`../${deckId}`, { replace: true })
   }, [pileData])
