@@ -16,6 +16,7 @@ const CourtCard = ({
   const courtNumber = aliases.courts[`court${card.split('')[0]}`]
   const { setTheme } = useTheme()
   const [direction, setDirection] = React.useState('next')
+  const [cards, setCards] = React.useState([])
 
   React.useLayoutEffect(() => {
     const courtColor = ['D', 'H'].includes(card.split('')[1]) ? 'red' : 'black'
@@ -32,21 +33,31 @@ const CourtCard = ({
     prevCardFn()
   }, [prevCardFn])
 
+  React.useEffect(() => {
+    setCards(cardStack)
+  }, [cardStack])
+
   return (
     <div className="court-card-wrapper">
       <div className="card-wrapper">
-        <div className="card-slot">
-          <div className="card-stack" data-direction={direction}>
-            <TransitionGroup>
-              { cardStack.map(({ code }) => (
-                <div className="card" key={code}>
-                  <CSSTransition timeout={500} classNames="card">
-                    <Card card={code} fill="currentColor" />
-                  </CSSTransition>
+        <div className="card-stack" data-direction={direction}>
+          <TransitionGroup component={null}>
+            { cards.map(({ code }) => (
+              <CSSTransition
+                in
+                key={code}
+                timeout={{
+                  appear: 500,
+                  exit: 200,
+                }}
+                classNames="card"
+              >
+                <div className="card-stack-item">
+                  <Card card={code} fill="currentColor" />
                 </div>
-              ))}
-            </TransitionGroup>
-          </div>
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         </div>
       </div>
       <div className="court-card-label">

@@ -4,54 +4,31 @@
   position: relative;
 }
 
-.card-base {
-  height: 100%;
-  border-radius: 25px;
-  display: block;
-  max-height: 100vh;
-  border: 1px solid rgba(#000, .1);
-}
-
 .card-wrapper {
-  height: 70vh;
   width: 100%;
   position: absolute;
-  transform: rotate(-12deg) translate3d(10vh, 60px, 0);
   z-index: 1;
 }
 
-.card-slot {
-  //transform: translateX(50vw);
-  //width: 100px;
-  //background: #fff;
+.card-stack {
+  position: relative;
+  z-index: 0;
+  height: 0;
+  top: 10vh;
+  transform: rotate(-12deg);
 }
 
 .card {
-  height: 100%;
-  position: absolute;
-  //transition: transform .2s ease-out, opacity .2s ease-out;
-  //transform: translate(14px,24px);
+  border-radius: 25px;
+  display: block;
+  border: 1px solid rgba(#000, .1);
+  max-width: 90vw;
+  position: relative;
+  left: 30px;
 }
 
 .card-face {
-  transition: opacity .5s ease-out;
-}
-
-.card-enter {
-  .card-base {
-    transform: translate(14px, 24px);
-  }
-  .card-face {
-    opacity: 0;
-  }
-}
-.card-enter-active {
-  .card-base {
-    transform: translate(0, 0);
-  }
-  .card-face {
-    opacity: 1;
-  }
+  transition: opacity .25s ease-out;
 }
 
 .court-card-label {
@@ -60,30 +37,42 @@
   }
 }
 
+.card-stack-item {
+  &.card-enter-active, &.card-exit {
+    .card-face {
+      opacity: 1;
+    }
+  }
+  &.card-enter, &.card-exit-active {
+    .card-face {
+      opacity: 0;
+    }
+  }
+}
 
 .card-stack {
-  position: absolute;
-  z-index: 0;
-  height: 100%;
-  .card-base {
-    position: absolute;
-    transition: color .4s ease-out, transform .2s ease-out;
+  .card-stack-item .card {
+    transition: transform .2s ease-out;
   }
 
-  [data-index="0"] {
-    opacity: 0;
+  .card-stack-item:not(:first-child) .card {
+    position: absolute;
+    top: 0;
   }
 
   @for $card from 1 through 20 {
-    $spread: ($card - 1) * 7px;
-    .card:nth-child(#{$card}) {
+    $spread: $card * 7px;
+    .card-stack-item.card-enter-done:nth-child(#{$card}) .card,
+    .card-stack-item.card-exit:nth-child(#{$card}) .card {
       transform: translate(-#{$spread}, #{$spread});
+    }
+    .card-stack-item:nth-child(#{$card}) .card {
       z-index: 20 - $card;
     }
-    [data-theme=black] & .card:nth-child(#{$card}) .card-base {
+    [data-theme=black] & .card-stack-item:nth-child(#{$card}) {
       color: darken(white, $card * 5%);
     }
-    [data-theme=red] & .card:nth-child(#{$card}) .card-base {
+    [data-theme=red] & .card-stack-item:nth-child(#{$card}) {
       color: mix(darkRed, white, $card * 5%);
     }
   }
@@ -114,7 +103,7 @@
   position: fixed;
   left: -24%;
   right: -20%;
-  bottom: 10vh;
+  bottom: 18vh;
   text-align: center;
   text-transform: uppercase;
   z-index: 1;
@@ -146,9 +135,9 @@
     }
   }
   &-curtain {
-    height: 200px;
+    height: 50vh;
     position: absolute;
-    bottom: -199px;
+    bottom: calc(1px - 50vh);
     left: 0;
     right: 0;
   }

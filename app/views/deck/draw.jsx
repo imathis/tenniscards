@@ -47,7 +47,7 @@ const Draw = () => {
   }, [swipeCount])
 
   const cardStack = React.useMemo(() => (
-    drawn.slice(0, position)
+    drawn.slice(0, position + 1).reverse()
   ), [position, drawn])
 
   if (card) {
