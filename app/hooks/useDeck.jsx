@@ -148,7 +148,6 @@ const useDeckSession = ({ deckId }) => {
   }, [drawData])
 
   React.useEffect(() => {
-    console.log(drawnPileData)
     if (drawnPileData?.piles?.drawn?.cards?.length) {
       setDrawnCards((d) => d.concat(drawnPileData?.piles?.drawn?.cards))
     }

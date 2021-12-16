@@ -1,10 +1,8 @@
 import React from 'react'
 import { useDeck } from '@app/hooks/useDeck'
-import {
-  Button, Stack, Shelf, pluralize,
-} from '@level'
+import { useSwipe } from 'beautiful-react-hooks'
 
-import { Card } from './card'
+import { CourtCard } from './courtCard'
 
 const Draw = () => {
   // All drawn cards from all sessions
@@ -36,18 +34,32 @@ const Draw = () => {
     }
   }, [drawn, position])
 
-  const card = drawn[position]
-  const cardCode = card?.code
+  const card = drawn[position]?.code
 
-  if (drawn.length) {
+  const ref = React.useRef()
+  const { swipeCount, direction } = useSwipe(ref, {
+    direction: 'horizontal', threshold: 10, preventDefault: true,
+  })
+
+  React.useEffect(() => {
+    if (swipeCount && direction === 'left') nextCard()
+    if (swipeCount && direction === 'right') prevCard()
+  }, [swipeCount])
+
+  const cardStack = React.useMemo(() => (
+    drawn.slice(0, position)
+  ), [position, drawn])
+
+  if (card) {
     return (
-      <Stack space={5}>
-        <Card
-          card={cardCode}
+      <div ref={ref}>
+        <CourtCard
+          card={card}
           nextCard={nextCard}
           prevCard={prevCard}
+          cardStack={cardStack}
         />
-      </Stack>
+      </div>
     )
   }
   return 'Drawing…'
