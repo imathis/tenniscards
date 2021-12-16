@@ -25,10 +25,14 @@ const CourtCard = ({
   const [cards, setCards] = React.useState([])
 
   React.useLayoutEffect(() => {
-    const courtColor = ['D', 'H'].includes(card.split('')[1]) ? 'red' : 'black'
+    const suit = card.split('')[1]
+
+    // diamonds or hearts
+    if (['D', 'H'].includes(suit)) setTheme('red')
     // Joker
-    if (card === 'X1') setTheme('purple')
-    else setTheme(courtColor)
+    else if (card === 'X1') setTheme('purple')
+    // black card
+    else setTheme('black')
   }, [card])
 
   const nextCard = React.useCallback(() => {

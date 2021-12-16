@@ -6,16 +6,27 @@ import { CourtCard } from './courtCard'
 
 const Draw = () => {
   // All drawn cards from all sessions
-  const { drawCard, drawnCards } = useDeck()
+  const { drawCard, remainingCount } = useDeck()
   // Track cards drawn in this session
   const [drawn, setDrawn] = React.useState([])
   // Track position of card drawing/viewing
   const [position, setPosition] = React.useState(0)
+  const [done, setDone] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!remainingCount) {
+      setDone(true)
+    }
+  }, [remainingCount])
 
   const draw = React.useCallback(async () => {
     const newCard = await drawCard()
-    setDrawn((d) => d.concat(newCard))
-    setPosition(drawn.length)
+    if (newCard) {
+      setDrawn((d) => d.concat(newCard))
+      setPosition(drawn.length)
+    } else {
+      setDone(true)
+    }
   }, [drawn, position])
 
   React.useEffect(async () => {
@@ -28,11 +39,11 @@ const Draw = () => {
 
   const nextCard = React.useCallback(() => {
     if (position + 1 === drawn.length) {
-      draw()
+      if (!done) draw()
     } else {
       setPosition(position + 1)
     }
-  }, [drawn, position])
+  }, [drawn, position, done])
 
   const card = drawn[position]?.code
 
