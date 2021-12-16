@@ -2,15 +2,15 @@ import React from 'react'
 import { useParams, Outlet } from 'react-router-dom'
 import { useGetQuery as useQuery, isNumber } from '@level'
 import {
-  useDeckRoutes, players, fullCourts, emptyCourts, aliases,
+  useDeckRoutes, suits, jokers, fullCourts, emptyCourts, aliases,
 } from '@app/helpers/deck'
 
 const DeckContext = React.createContext()
 const useDeck = () => React.useContext(DeckContext)
 
 // Expects cards in format [{ code: '2S', ...},]
-const courtPlanFromInactivePile = (cards = []) => (
-  cards.reduce((all, { code }) => {
+const courtPlanFromInactivePile = (cards = []) => {
+  const plan = cards.reduce((all, { code }) => {
     // get court from split '2S' => '2'
     const [court] = code.split('')
     // Reference the courts by 'court2' instead of '2'
@@ -21,11 +21,9 @@ const courtPlanFromInactivePile = (cards = []) => (
     // Subtract inactive card from court size
     return { ...all, [courtName]: count - 1 }
   }, fullCourts())
-)
 
-const filterJokers = ({ cards = [] }) => (
-  cards.filter(({ code }) => !code.startsWith('X'))
-)
+  return plan
+}
 
 const useDeckSession = ({ deckId }) => {
   const deckRoutes = useDeckRoutes({ deckId })
@@ -35,6 +33,7 @@ const useDeckSession = ({ deckId }) => {
   const [returnCards] = useQuery({ url: deckRoutes.deck.return() })
   const [exile, { data: exiled }] = useQuery({ url: deckRoutes.pile.add({ pileId: 'inactive' }) })
   const [addDrawn, { data: drawnPileData }] = useQuery({ url: deckRoutes.pile.add({ pileId: 'drawn' }) })
+  const [useJoker, setUseJoker] = React.useState(false)
 
   const [shuffleDeck, { data: shuffled }] = useQuery({ url: deckRoutes.deck.shuffle() })
   const shuffleAll = React.useCallback(shuffleDeck, [deckId])
@@ -70,6 +69,7 @@ const useDeckSession = ({ deckId }) => {
         const courtId = court.replace(/court/, '')
         // Select remainder of court (available suits) and
         // convert player suits to card codes, e.g. 2S
+        const players = courtId === 'X' ? jokers : suits
         return all.concat(players.slice(count, 4).map((suit) => `${courtId}${suit}`))
       }, [])
       : []
@@ -88,7 +88,7 @@ const useDeckSession = ({ deckId }) => {
       await exile({ query: { cards: ['X1', 'X2'] } })
       // Initialize court state
     } else {
-      const cards = filterJokers(inactivePile)
+      const { cards } = inactivePile
       // If there are non-Joker inactive cards
       if (cards.length) {
         setCourtPlan(courtPlanFromInactivePile(cards))
@@ -126,7 +126,7 @@ const useDeckSession = ({ deckId }) => {
   }, [courtPlan])
 
   const setCourts = React.useCallback(async () => {
-    const inactive = getInactiveCards(courtPlan).concat(['X1', 'X2'])
+    const inactive = getInactiveCards(courtPlan)
     // Return all inactive cards to the deck
     await shuffleAll()
     // Draw all cards
@@ -137,7 +137,7 @@ const useDeckSession = ({ deckId }) => {
     await returnCards({ query: { remaining: true } })
     // Shuffle cards
     return shuffle({ query: { remaining: true } })
-  }, [courtPlan])
+  }, [courtPlan, useJoker])
 
   const resetCourtPlan = React.useCallback(() => {
     setCourtPlan(emptyCourts())
@@ -196,6 +196,8 @@ const useDeckSession = ({ deckId }) => {
     playingCourts,
     courtsByType,
     deckRoutes,
+    useJoker,
+    setUseJoker,
   }
 }
 

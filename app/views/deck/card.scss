@@ -55,6 +55,7 @@
     transition: transform .2s ease-out;
   }
 
+  // All additional cards in stack should be positioned absolutely
   .card-stack-item:not(:first-child) .card {
     position: absolute;
     top: 0;
@@ -68,12 +69,6 @@
     }
     .card-stack-item:nth-child(#{$card}) .card {
       z-index: 20 - $card;
-    }
-    [data-theme=black] & .card-stack-item:nth-child(#{$card}) {
-      color: darken(white, $card * 5%);
-    }
-    [data-theme=red] & .card-stack-item:nth-child(#{$card}) {
-      color: mix(darkRed, white, $card * 5%);
     }
   }
 }
@@ -94,6 +89,16 @@
     color: white;
     &-curtain {
       background: #1a1a1a;
+    }
+  }
+}
+
+[data-theme=purple] {
+  .court-card-label {
+    background-color: #6124cb;
+    color: white;
+    &-curtain {
+      background: #360b81;
     }
   }
 }

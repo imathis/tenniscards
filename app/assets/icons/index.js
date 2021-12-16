@@ -62,3 +62,5 @@ export { default as cardKC } from './KC.svg'
 export { default as cardKH } from './KH.svg'
 export { default as cardKS } from './KS.svg'
 export { default as cardKD } from './KD.svg'
+
+export { default as cardX1 } from './X1.svg'

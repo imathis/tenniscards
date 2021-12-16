@@ -13,23 +13,29 @@ const CourtCard = ({
   prevCard: prevCardFn,
   cardStack,
 }) => {
-  const courtNumber = aliases.courts[`court${card.split('')[0]}`]
+  const courtNumber = React.useMemo(() => {
+    const court = card.split('')[0]
+    if (court === 'X') return 'Rotation'
+
+    const number = aliases.courts[`court${court}`]
+    return `Court ${number}`
+  }, [card])
+
   const { setTheme } = useTheme()
-  const [direction, setDirection] = React.useState('next')
   const [cards, setCards] = React.useState([])
 
   React.useLayoutEffect(() => {
     const courtColor = ['D', 'H'].includes(card.split('')[1]) ? 'red' : 'black'
-    setTheme(courtColor)
+    // Joker
+    if (card === 'X1') setTheme('purple')
+    else setTheme(courtColor)
   }, [card])
 
   const nextCard = React.useCallback(() => {
-    setDirection('next')
     nextCardFn()
   }, [nextCardFn])
 
   const prevCard = React.useCallback(() => {
-    setDirection('back')
     prevCardFn()
   }, [prevCardFn])
 
@@ -40,20 +46,19 @@ const CourtCard = ({
   return (
     <div className="court-card-wrapper">
       <div className="card-wrapper">
-        <div className="card-stack" data-direction={direction}>
+        <div className="card-stack">
           <TransitionGroup component={null}>
             { cards.map(({ code }) => (
               <CSSTransition
-                in
                 key={code}
                 timeout={{
-                  appear: 500,
-                  exit: 200,
+                  appear: 100,
+                  exit: 100,
                 }}
                 classNames="card"
               >
                 <div className="card-stack-item">
-                  <Card card={code} fill="currentColor" />
+                  <Card card={code} />
                 </div>
               </CSSTransition>
             ))}
@@ -65,7 +70,7 @@ const CourtCard = ({
           <div className="court-card-label-small-text">you have drawn</div>
         </div>
         <div className="court-card-label-large">
-          <div className="court-card-label-large-text">Court {courtNumber}</div>
+          <div className="court-card-label-large-text">{courtNumber}</div>
         </div>
         <div className="court-card-label-curtain" />
       </div>

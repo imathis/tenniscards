@@ -34,7 +34,8 @@ const useDeckRoutes = (params = {}) => ({
 })
 
 const courts = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K']
-const players = ['C', 'D', 'H', 'S']
+const suits = ['C', 'D', 'H', 'S']
+const jokers = ['1', '2']
 const aliases = {
   courts: {
     courtA: '1',
@@ -50,15 +51,21 @@ const aliases = {
     courtJ: '11',
     courtQ: '12',
     courtK: '13',
+    courtX: 'Rotation',
   },
-  counts: ['Empty', 'Loner', 'Singles', 'Australian', 'Doubles'],
+  counts: ['Empty', 'Loner', 'Singles', '2 v. 1', 'Doubles'],
 }
 
-const initCourts = (options) => (
-  courts.reduce((all, court) => (
+const initCourts = (options) => {
+  const obj = courts.reduce((all, court) => (
     { ...all, [`court${court}`]: options?.full ? 4 : 0 }
   ), {})
-)
+  if (options?.full) {
+    return { ...obj, courtX: 2 }
+  }
+
+  return obj
+}
 
 const emptyCourts = () => initCourts({ full: false })
 const fullCourts = () => initCourts({ full: true })
@@ -68,6 +75,7 @@ export {
   emptyCourts,
   fullCourts,
   courts,
-  players,
+  suits,
+  jokers,
   aliases,
 }

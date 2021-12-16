@@ -35,6 +35,11 @@ const Settings = () => {
     setCourtCount({ court, count: valueToCount(value) })
   }, [])
 
+  const toggleJoker = React.useCallback(({ target }) => {
+    const { checked, name: court } = target
+    setCourtCount({ court, count: checked ? 1 : 0 })
+  }, [])
+
   const start = React.useCallback(async () => {
     await setCourts()
     navigate('../start', { replace: true })
@@ -70,6 +75,18 @@ const Settings = () => {
           )
         })
       }
+      <label htmlFor="courtX">
+        <Shelf space={4}>
+          <input
+            id="courtX"
+            name="courtX"
+            type="checkbox"
+            checked={courtPlan.courtX === 1}
+            onChange={toggleJoker}
+          />
+          <div>Add a Joker</div>
+        </Shelf>
+      </label>
       <Shelf space={8}>
         <Button text="Reset" onClick={resetCourtPlan} />
         <Button theme="primary" text="Start" onClick={start} />

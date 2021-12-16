@@ -11,6 +11,7 @@ import { Main } from '@app/layouts/Main'
 import { ThemeProvider } from '@app/hooks/useTheme'
 import { DeckIndex } from './deck'
 import { Card } from './deck/card'
+import { Test } from './deck/test'
 
 const Welcome = () => (
   <h1>Welcome</h1>
@@ -27,6 +28,7 @@ const AppIndex = () => (
       <Route path="welcome" element={<Welcome />} />
       <Route path="deck/*" element={<DeckIndex />} />
       <Route path="card/:cardId" element={<Card />} />
+      <Route path="test" element={<Test />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   </Routes>
