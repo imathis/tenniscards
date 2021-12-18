@@ -21,7 +21,6 @@ const countToValue = (value) => {
 
 const Settings = () => {
   const {
-    deckId,
     courtPlan,
     setCourtCount,
     setCourts,
@@ -49,7 +48,7 @@ const Settings = () => {
 
   return (
     <Stack space={5}>
-      <h1>Settings {deckId}</h1>
+      <h1>Settings</h1>
       {
         courts.map((court) => {
           const name = `court${court}`

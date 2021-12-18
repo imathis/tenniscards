@@ -9,6 +9,8 @@
   "scripts": {
     "start": "webpack serve --config config.webpack.js",
     "build": "webpack --config config.webpack.js",
+    "build_prod": "NODE_ENV=production webpack --config config.webpack.js",
+    "deploy": "rsync -avz ./build/ root@tenniscards.app:/var/www/tenniscards.app",
     "dev": "NODE_ENV=development yarn start",
     "lint": "eslint",
     "test": "jest"

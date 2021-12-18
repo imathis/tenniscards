@@ -43,7 +43,7 @@ module.exports = {
   },
   plugins: [
     HtmlPlugin,
-    new Dotenv({}),
+    new Dotenv(),
     GitPlugin,
   ],
 }

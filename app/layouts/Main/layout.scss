@@ -17,7 +17,7 @@ ul, li {
 }
 
 .shade.default {
-  background: #333;
+  background: #fff;
 }
 .shade.purple {
   background: linear-gradient(0deg, #7f36ff, #702de5, #6124cb, #521cb2, #441499, #360b81, #29046a, #1c0054);
@@ -29,9 +29,15 @@ ul, li {
   background: linear-gradient(0deg, #b51a00, #9a1300, #7f0d00, #640600, #490000);
 }
 
-.shade-enter {
+.shade-enter-active {
   opacity: 0;
 }
-.shade-enter-active {
+.shade-enter-done {
   opacity: 1;
+}
+.shade-exit {
+  opacity: 1;
+}
+.shade-exit-active {
+  opacity: 0;
 }

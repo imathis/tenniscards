@@ -13,5 +13,5 @@ ReactDOM.render(
   <BrowserRouter>
     <AppIndex />
   </BrowserRouter>,
-  document.getElementById('app'),
+  document.getElementById('root'),
 )

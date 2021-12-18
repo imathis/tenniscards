@@ -7,7 +7,7 @@ const ThemeProvider = (props) => {
   const [theme, setTheme] = React.useState('default')
 
   React.useLayoutEffect(() => {
-    const app = document.querySelector('#app')
+    const app = document.querySelector('#root')
     app.dataset.theme = theme
   }, [theme])
 
