@@ -2,22 +2,10 @@
 @use 'level/space';
 @use 'level/color';
 
-hr {
-  background: none;
-  height: 0;
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid #d9dddf;
-}
-
 #root {
   position: relative;
 }
 
 #logo {
   padding: 8px 0;
-}
-
-[data-padded=true] {
-  padding: space.get(6) space.get(7);
 }

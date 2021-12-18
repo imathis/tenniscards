@@ -5,19 +5,7 @@ import { Stack, Shelf, Button } from '@level'
 import { useDeck } from '@app/hooks/useDeck'
 import { courts, aliases } from '@app/helpers/deck'
 
-const valueToCount = (value) => {
-  const number = Number.parseInt(value, 10)
-  // convert values 0, 1, 2, 3
-  // to counts 0, 2, 3, 4
-  return number ? number + 1 : number
-}
-
-const countToValue = (value) => {
-  const number = Number.parseInt(value, 10)
-  // convert counts 0, 2, 3, 4
-  // to values:     0, 1, 2, 3
-  return number ? number - 1 : number
-}
+import './settings.scss'
 
 const Settings = () => {
   const {
@@ -31,7 +19,7 @@ const Settings = () => {
 
   const onChange = React.useCallback(({ target }) => {
     const { value, name: court } = target
-    setCourtCount({ court, count: valueToCount(value) })
+    setCourtCount({ court, count: Number.parseInt(value, 10) })
   }, [])
 
   const toggleJoker = React.useCallback(({ target }) => {
@@ -47,48 +35,59 @@ const Settings = () => {
   if (!courtPlan) return null
 
   return (
-    <Stack space={5}>
-      <h1>Settings</h1>
-      {
-        courts.map((court) => {
+    <Stack space={8} className="deck-settings">
+      <h1>Court Plan</h1>
+      <Stack space={4}>
+        { courts.map((court) => {
           const name = `court${court}`
           const count = courtPlan[name]
-          const value = countToValue(count)
-          const type = aliases.counts[count]
           return (
-            <label htmlFor={name} key={name}>
-              <Shelf space={8}>
-                {aliases.courts[name]}
-                <input
-                  type="range"
-                  id={name}
-                  name={name}
-                  min={0}
-                  max={3}
-                  value={value}
-                  onChange={onChange}
-                />
-                <div>{ type === 'Empty' ? '' : type }</div>
+            <div className="deck-settings-court">
+              <Shelf
+                key={court}
+                valign="center"
+                space={4}
+              >
+                <div
+                  style={{ minWidth: '1em' }}
+                  className="deck-settings-court-label"
+                >{aliases.courts[name]}
+                </div>
+                { [0, 2, 3, 4].map((num) => (
+                  <label htmlFor={`${name}-${num}`} key={`${name}-${num}`}>
+                    <input
+                      type="radio"
+                      id={`${name}-${num}`}
+                      name={name}
+                      value={num}
+                      checked={num === count}
+                      onChange={onChange}
+                    />
+                    <div className="deck-settings-court-count">
+                      { aliases.counts[num] }
+                    </div>
+                  </label>
+                ))}
               </Shelf>
-            </label>
+            </div>
           )
-        })
-      }
-      <label htmlFor="courtX">
-        <Shelf space={4}>
-          <input
-            id="courtX"
-            name="courtX"
-            type="checkbox"
-            checked={courtPlan.courtX === 1}
-            onChange={toggleJoker}
-          />
-          <div>Add a Joker</div>
-        </Shelf>
+        })}
+      </Stack>
+      <label htmlFor="courtX" className="deck-settings-court">
+        <input
+          id="courtX"
+          name="courtX"
+          type="checkbox"
+          checked={courtPlan.courtX === 1}
+          onChange={toggleJoker}
+        />
+        <div className="deck-settings-court-count add-joker">
+          Add a Joker
+        </div>
       </label>
-      <Shelf space={8}>
+      <Shelf space={8} align="split">
         <Button text="Reset" onClick={resetCourtPlan} />
-        <Button theme="primary" text="Start" onClick={start} />
+        <Button theme="primary" text="Next" onClick={start} />
       </Shelf>
     </Stack>
   )
