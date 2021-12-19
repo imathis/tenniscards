@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 
 import './index.scss'
-import '@app/assets/favicons/favicons'
+import '@app/assets/root'
 import { AppIndex } from '@app/views/index'
 
 ReactDOM.render(

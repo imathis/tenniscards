@@ -8,7 +8,10 @@
 }
 
 .deck-settings-court {
-  input {
+  label {
+    min-width: 2em;
+  }
+  input[type=radio] {
     appearance: none;
     margin: 0;
     opacity: 0;
@@ -17,12 +20,16 @@
     position: absolute;
   }
 
+  input[type=range] {
+    width: 100%;
+  }
+
   &-label {
     text-align: right;
     padding-right: 8px;
     width: calc((100vw/6) - 8px);
   }
-  &-count {
+  &-button {
     min-width: calc(100vw/6);
     padding: .5em 0;
     text-align: center;
@@ -35,6 +42,7 @@
       background: color.get(blue-50);
     }
   }
+
 
   .add-joker {
     max-width: 50vw;

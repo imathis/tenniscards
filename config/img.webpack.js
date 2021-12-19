@@ -8,8 +8,8 @@ const imgConfigs = [
       },
       // app/assets/favicon => /*.ext
       {
-        test: /\.(png|j?g|svg)?$/,
-        include: /assets\/favicons\/.*/,
+        test: /\.(png|j?g|svg|webmanifest|ico)?$/,
+        include: /assets\/root\/.*/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext][query]',

@@ -1,0 +1,103 @@
+$slider-track: #ddd;
+$slider-track-line: #aaa;
+$slider-mark: #fff;
+
+@mixin reset-slider {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+  &:focus { outline: none; }
+  &::-webkit-slider-thumb { -webkit-appearance: none; }
+  &::-moz-slider-thumb { -moz-appearance: none; }
+  &::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  &::-moz-focus-outer { 
+    border: 0;
+  }
+  &::-moz-range-track {
+    border: inherit;
+    background: transparent;
+  }
+}
+
+@mixin slider-thumb {
+  &::-moz-range-thumb     { @content; }
+  &::-webkit-slider-thumb { @content; }
+  &::-ms-thumb            { @content; }
+}
+
+@mixin slider-track {
+  @content;
+  &::-moz-slider-track {
+    @content;
+  }
+  &::-ms-track {
+    @content;
+  }
+}
+
+input[type=range] {
+  @include reset-slider;
+  position: relative;
+  z-index: 4;
+  
+  @include slider-thumb {
+    box-shadow:
+      rgba(#000, .2) 0 0 0 1px;
+      //rgba(#000, .4) 0 1px 1px inset;
+    background: #fff;
+    box-sizing: border-box;
+    height: 21px;
+    width: 21px;
+    border-radius: 100%;
+    position: relative;
+    top: 0px;
+    transition: all .15s ease-in;
+
+    &:active {
+      background: #409bd9;
+      box-shadow: 0 0 0 1px hsl(203, 37%, 45%);
+      //, rgba(#000, .4) 0 1px 1px inset;
+    }
+  }
+  
+  &:focus {
+    @include slider-thumb {
+      background: #409bd9;
+      box-shadow: 0 0 0 1px hsl(203, 37%, 45%);
+      //, rgba(#000, .4) 0 1px 1px inset;
+    }
+  }
+  
+  @include slider-track {
+    height: 11px;
+    background: #d7dcdf;
+    border-radius: 25px;
+    background: $slider-track;
+    //box-shadow: $slider-track-line 0 0 0 1px;
+
+    &:after {
+      position: absolute;
+      content: "";
+      left: 4px; right: 4px; top: 6px;
+      height: 5px;
+      z-index: -1;
+      border-radius: 4px;
+    }
+  }
+
+  margin: 0;
+
+  @include slider-track {
+    &:after {
+      display: none;
+    }
+  }
+}
