@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-import QRCode from 'qrcode-svg'
+import QRCode from 'qrcode-svg-table'
 
 const QrCode = () => {
   const { deckId } = useParams()
@@ -16,7 +16,13 @@ const QrCode = () => {
     return code.svg()
   }, [deckId])
 
-  return <div dangerouslySetInnerHTML={{ __html: svg }} />
+  return (
+    <div
+      className="qr-code"
+      /* eslint-disable react/no-danger */
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  )
 }
 
 export {

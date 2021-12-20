@@ -6,8 +6,8 @@ import {
 } from '@level'
 import { useDeck } from '@app/hooks/useDeck'
 import { courts, aliases } from '@app/helpers/deck'
-import { QrCode } from './qr'
-import { SliderInput } from './slider'
+import { QrCode } from '@app/components/QrCode'
+import { SliderInput } from '@app/components/Slider'
 
 import './settings.scss'
 
@@ -55,7 +55,7 @@ const Settings = () => {
   return (
     <Stack space={8} className="deck-settings">
       <h1>Settings</h1>
-      <Stack space={5}>
+      <Stack space={7}>
         {
           courts.map((court) => {
             const name = `court${court}`
@@ -65,9 +65,11 @@ const Settings = () => {
             return (
               <div className="deck-settings-court" key={`${court}-${name}`}>
                 <Shelf space={4}>
-                  <label htmlFor={name}>
-                    {aliases.courts[name]}
-                  </label>
+                  <Column className="deck-settings-court-label">
+                    <label htmlFor={name}>
+                      {aliases.courts[name]}
+                    </label>
+                  </Column>
                   <Column grow>
                     <SliderInput
                       id={name}
@@ -77,26 +79,32 @@ const Settings = () => {
                       onChange={onChange}
                     />
                   </Column>
-                  <Column shrink={false}>
-                    <div className="deck-settings-court-count">{ type === 'Empty' ? '' : type }</div>
+                  <Column
+                    shrink={false}
+                    className="deck-settings-court-count"
+                    data-type={type.toLowerCase()}
+                  >
+                    { type }
                   </Column>
                 </Shelf>
               </div>
             )
           })
         }
-        <label htmlFor="courtX">
-          <Shelf space={4}>
-            <input
-              id="courtX"
-              name="courtX"
-              type="checkbox"
-              checked={courtPlan.courtX === 1}
-              onChange={toggleJoker}
-            />
-            <div>Add a Joker</div>
-          </Shelf>
-        </label>
+        <Column className="deck-settings-court-add-joker">
+          <label htmlFor="courtX">
+            <Shelf space={4} align="center">
+              <input
+                id="courtX"
+                name="courtX"
+                type="checkbox"
+                checked={courtPlan.courtX === 1}
+                onChange={toggleJoker}
+              />
+              <div>Add a Joker</div>
+            </Shelf>
+          </label>
+        </Column>
       </Stack>
       <Shelf space={8}>
         <Button text="Reset" onClick={resetCourtPlan} />

@@ -1,7 +1,7 @@
 import React from 'react'
 
+import { SliderInput } from '@app/components/Slider'
 import { CourtCard } from './courtCard'
-import { SliderInput } from './slider'
 
 const Test = () => {
   // All drawn cards from all sessions

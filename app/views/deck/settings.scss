@@ -27,7 +27,7 @@
   &-label {
     text-align: right;
     padding-right: 8px;
-    width: calc((100vw/6) - 8px);
+    width: calc((100vw/7) - 8px);
   }
   &-button {
     min-width: calc(100vw/6);
@@ -43,9 +43,12 @@
     }
   }
 
-
-  .add-joker {
-    max-width: 50vw;
-    margin: 0 auto;
+  &-count {
+    max-width: 70px;
+    transition: opacity .3s ease-out;
+    &[data-type=empty] {
+      opacity: .3;
+    }
   }
+
 }

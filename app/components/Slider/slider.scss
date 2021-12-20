@@ -78,9 +78,7 @@ input[type=range] {
   
   @include slider-track {
     height: 11px;
-    background: #d7dcdf;
-    border-radius: 25px;
-    background: $slider-track;
+    background: transparent;
     //box-shadow: $slider-track-line 0 0 0 1px;
 
     &:after {
@@ -96,8 +94,16 @@ input[type=range] {
   margin: 0;
 
   @include slider-track {
-    &:after {
-      display: none;
-    }
+    background: #d7dcdf;
+    border-radius: 25px;
   }
+}
+
+.range-slider-track {
+  display: grid;
+}
+
+.range-slider-segment {
+  border-right: 1px solid #000;
+  height: 100%;
 }

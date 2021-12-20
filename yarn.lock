@@ -2487,7 +2487,7 @@ __metadata:
     path: ^0.12.7
     postcss: ^8.4.4
     prop-types: ^15.7.2
-    qrcode-svg: ^1.1.0
+    qrcode-svg-table: ^1.1.2
     react: ^17.0.2
     react-devtools: ^4.10.1
     react-dom: ^17.0.2
@@ -10074,12 +10074,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qrcode-svg@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "qrcode-svg@npm:1.1.0"
+"qrcode-svg-table@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "qrcode-svg-table@npm:1.1.2"
   bin:
     qrcode-svg: bin/qrcode-svg.js
-  checksum: 07f9dcdea55fe11a5264aad6c576ab91a37968bace6997d8cde868aeb8dfb87fd3fb352715ee6f8f26a732231c194af5e2b8fa550103abdb20ed5c8ad0a1bd3e
+  checksum: f8432b544fff6c18b19cd69cd2f8013c88686ace015da90df5050e2bd05e1a252f717b862afd9fa55ac8b1132df777066cf1ebb742b6d912138046177fa10f0d
   languageName: node
   linkType: hard
 

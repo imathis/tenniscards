@@ -40,6 +40,9 @@ module.exports = {
     extensions: ['.js', '.json', '.jsx'],
     // Make it easy to import framework modules without specifying path
     alias,
+    fallback: {
+      fs: false,
+    },
   },
   plugins: [
     HtmlPlugin,
